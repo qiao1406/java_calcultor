@@ -28,10 +28,12 @@ public class Calculate {
 		case "/":
 			
 			if( n2 == 0 ) {
-				resultStr = "WrongAnswer";
+				resultStr = "错误，除数不能为0";
 			}
 			else {
-				resultDouble = n1 / n2;
+				double d1 = (double)n1;
+				double d2 = (double)n2;
+				resultDouble = d1/d2;
 				resultStr = format + String.valueOf(resultDouble);
 			}
 			
