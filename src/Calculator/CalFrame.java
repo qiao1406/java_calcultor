@@ -1,7 +1,8 @@
 package Calculator;
 
-import java.util.regex.*;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +14,15 @@ import javax.swing.JTextArea;
 
 
 public class CalFrame extends JFrame {
-
+	
+	//配色
+	private final static Color OP_COLOR = new Color(251, 150, 110);
+	private final static Color NUM_COLOR = new Color(36, 147, 110);
+	private final static Color EQUAL_COLOR = new Color(239, 187, 36);
+	private final static Color CLR_COLOR = new Color(0, 92, 175);
+	
+	private final static Font FONT1 = new Font("黑体", Font.BOLD, 20);
+	
 	private JButton num0 = new JButton("0");
 	private JButton num1 = new JButton("1");
 	private JButton num2 = new JButton("2");
@@ -38,10 +47,33 @@ public class CalFrame extends JFrame {
 
 	public CalFrame() {
 
-		rst.setSize(250, 50);
-//		rst.setBounds(0, 0, 250, 50);
 		rst.setEditable(false);
-
+		
+		//颜色,字体设置
+		num0.setBackground(NUM_COLOR);
+		num1.setBackground(NUM_COLOR);
+		num2.setBackground(NUM_COLOR);
+		num3.setBackground(NUM_COLOR);
+		num4.setBackground(NUM_COLOR);
+		num5.setBackground(NUM_COLOR);
+		num6.setBackground(NUM_COLOR);
+		num7.setBackground(NUM_COLOR);
+		num8.setBackground(NUM_COLOR);
+		num9.setBackground(NUM_COLOR);
+		addButton.setBackground(OP_COLOR);
+		addButton.setFont(FONT1);
+		minusButton.setBackground(OP_COLOR);
+		minusButton.setFont(FONT1);
+		mulButton.setBackground(OP_COLOR);
+		mulButton.setFont(FONT1);
+		divButton.setBackground(OP_COLOR);
+		divButton.setFont(FONT1);
+		equalButton.setBackground(EQUAL_COLOR);
+		equalButton.setFont(FONT1);
+		clearButton.setBackground(CLR_COLOR);
+		
+		
+		//添加动作
 		num0.addActionListener(new ActionListener() {
 
 			@Override
@@ -145,22 +177,7 @@ public class CalFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String cmd = rst.getText();
-				String regex = "\\d+[\\+\\-\\*\\/]\\d+";
-				Pattern p = Pattern.compile(regex);
-				Matcher m = p.matcher(cmd);
-				if ( m.find() ) {
-					
-					String opRegex = "[\\+\\-\\*\\/]";
-					String[] s = Pattern.compile(opRegex).split(cmd);
-					Matcher m1 = Pattern.compile(opRegex).matcher(cmd);
-					
-					int num1 = Integer.parseInt(s[0]);
-					int num2 = Integer.parseInt(s[1]);
-					m1.find();
-					String op = String.valueOf( cmd.charAt( m1.start() ) );
-					String result = Calculate.cal(num1, num2, op);
-					rst.setText(result);
-				}
+				rst.setText(Calculate.calResult(cmd));
 			}
 		});
 		clearButton.addActionListener(new ActionListener() {
@@ -195,14 +212,19 @@ public class CalFrame extends JFrame {
 		jp2.add(clearButton);
 		jp2.add(divButton);
 		
-
+		jp1.setLocation(0, 0);
+		jp2.setLocation(0, 100);
+		
 		add(BorderLayout.NORTH, jp1);
 		add(BorderLayout.SOUTH, jp2);
-		
-		setSize(300, 400);
-		setTitle("QiaoCalculator v1.0");
-		pack();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("QiaoCalculator v1.1");
+		setSize(400, 400);
 		setVisible(true);
 	}
-
+	
+	public static void main ( String[] args ) {
+		new CalFrame();
+	}
+	
 }
