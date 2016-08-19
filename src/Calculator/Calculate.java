@@ -9,7 +9,6 @@ public class Calculate {
 		String regex = "\\d+[\\+\\-\\*\\/]\\d+";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(cmd);
-		System.out.println(cmd);
 		if ( m.find() ) {
 			
 			String opRegex = "[\\+\\-\\*\\/]";

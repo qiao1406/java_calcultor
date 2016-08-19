@@ -9,8 +9,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 
 public class CalFrame extends JFrame {
@@ -39,8 +41,9 @@ public class CalFrame extends JFrame {
 	private JButton divButton = new JButton("/");
 	private JButton equalButton = new JButton("=");
 	private JButton clearButton = new JButton("Clear");
-
-	private JTextArea rst = new JTextArea();
+	
+	private JLabel text = new JLabel("result");
+	private JTextArea rst = new JTextArea(1,30);
 
 	private JPanel jp1 = new JPanel();
 	private JPanel jp2 = new JPanel();
@@ -188,6 +191,7 @@ public class CalFrame extends JFrame {
 			}
 		});
 		
+		jp1.add(text);
 		jp1.add(rst);
 
 		jp2.setLayout(new GridLayout(4, 4));
@@ -218,8 +222,9 @@ public class CalFrame extends JFrame {
 		add(BorderLayout.NORTH, jp1);
 		add(BorderLayout.SOUTH, jp2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("QiaoCalculator v1.1");
+		setTitle("QiaoCalculator v1.2-稳定版");
 		setSize(400, 400);
+		setLocation(200, 200);
 		setVisible(true);
 	}
 	
