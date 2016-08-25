@@ -289,12 +289,11 @@ public class CalFrame extends JFrame {
 		jp2.setVisible(true);
 		
 		setLayout( new GridLayout(2,1));
-//		add(BorderLayout.NORTH, jp1);
-//		add(BorderLayout.SOUTH, jp2);
 		add(jp1);
 		add(jp2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("QiaoCalculator v2.0");
+		setResizable(false);
+		setTitle("QiaoCalculator v2.1");
 		setSize(430, 400);
 		setLocation(200, 200);
 		setVisible(true);
