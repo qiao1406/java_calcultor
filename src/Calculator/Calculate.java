@@ -13,6 +13,13 @@ public class Calculate {
 	
 	public String calResult ( String equation ) {
 		
+		//替换乘除号
+		equation = equation.replace("X", "*");
+		equation = equation.replace("÷", "/");
+		
+		//处理负号
+		equation = negativeNumTransfer(equation);
+		
 		if ( !checkFormat(equation) ) {
 			return "算式格式错误";
 		}
@@ -26,7 +33,16 @@ public class Calculate {
 			String temp = exp.substring(0,1);
 			exp.delete(0, 1);
 			
-			if( !isNum(temp) ) { // temp不是数字
+			if( isNum(temp) )  { // temp是数字
+				tempNum.append(temp);
+			}
+//			else if ( exp.length() > 1 && temp.equals("-") && 
+//					isNum(exp.substring(1, 2)) ) {
+//				System.out.println("xxx");
+//				tempNum.append(temp);
+//			}
+			else { // temp不是数字
+				
 				if (!"".equals(tempNum.toString())) {
 					// 当表达式的第一个符号为括号
 					double num = Double.parseDouble(tempNum.toString());
@@ -52,9 +68,6 @@ public class Calculate {
 				// 判断当前运算符与栈顶元素优先级， 如果高，或者低于平，计算完后，将当前操作符号，放入操作符栈
 				refreshSybStack(temp);
 				
-			}
-			else { // temp是数字
-				tempNum.append(temp);
 			}
 			
 		}
@@ -104,6 +117,47 @@ public class Calculate {
 		
 		return true;
 	}
+	
+	private String negativeNumTransfer( String equation ) {
+		// 处理算式，将表示负数的部分进行改动，转成calResult方法支持的 
+//		char[] c = equation.toCharArray();
+		
+		if( equation.length() <= 1 ) {
+			return equation;
+		}
+		
+		StringBuffer str = new StringBuffer().append(equation);
+		
+		for ( int i = 0; i < str.length()-1; ++i ) {
+			
+			if( !str.substring(i, i+1).equals("-") ) {
+				continue;
+			}
+			
+			if ( i == 0 ) {
+				char temp = str.charAt(1);
+				if( isNumChar(temp) || isDecimalPoint(temp) || isLeftBracket(temp) ) {
+					str.insert(0, "0");
+					i++;
+				}
+			}
+			else {
+				char last = str.charAt(i-1);
+				char next = str.charAt(i+1);
+				
+				if( isLeftBracket(last) &&
+					( isNumChar(next) || isDecimalPoint(next) || isLeftBracket(next) ) ) {
+					str.insert(i, "0");
+					i++;
+				}
+			}
+		}
+				
+		
+		return str.toString();
+	}
+	
+	
 	
 	private boolean checkFormat ( String equation ) {
 		char[] c = equation.toCharArray();

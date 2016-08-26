@@ -27,6 +27,8 @@ public class CalFrame extends JFrame {
 	private final static Color DEL_COLOR = new Color(0, 152, 120);
 	
 	private final static Font FONT1 = new Font("黑体", Font.BOLD, 20);
+	private final static Font FONT2 = new Font("微软雅黑", Font.PLAIN, 20);
+	private final static Font FONT3 = new Font("微软雅黑", Font.PLAIN, 15);
 	
 	private JButton num0 = new JButton("0");
 	private JButton num1 = new JButton("1");
@@ -41,17 +43,17 @@ public class CalFrame extends JFrame {
 	private JButton decimalPoint = new JButton(".");
 	private JButton addButton = new JButton("+");
 	private JButton minusButton = new JButton("-");
-	private JButton mulButton = new JButton("*");
-	private JButton divButton = new JButton("/");
+	private JButton mulButton = new JButton("X");
+	private JButton divButton = new JButton("÷");
 	private JButton equalButton = new JButton("=");
 	private JButton leftBracket = new JButton("(");
 	private JButton rightBracket = new JButton(")");
 	private JButton clearButton = new JButton("Clear");
 	private JButton deleteButton = new JButton("Del");
 	
-	private JLabel equationLabel = new JLabel("Equation");
-	private JLabel resultLabel = new JLabel("Result");
-	private JTextArea equation = new JTextArea(1,30);
+	private JLabel equationLabel = new JLabel("算式");
+	private JLabel resultLabel = new JLabel("结果");
+	private JTextArea equation = new JTextArea(2,30);
 	private JTextArea result = new JTextArea(1,30);
 
 	private JPanel jp1 = new JPanel();
@@ -63,6 +65,11 @@ public class CalFrame extends JFrame {
 		result.setEditable(false);
 		
 		//颜色,字体设置
+		equationLabel.setFont(FONT2);
+		resultLabel.setFont(FONT2);
+		equation.setFont(FONT3);
+		result.setFont(FONT3);
+		
 		num0.setBackground(NUM_COLOR);
 		num1.setBackground(NUM_COLOR);
 		num2.setBackground(NUM_COLOR);
@@ -189,14 +196,14 @@ public class CalFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				equation.setText(equation.getText() + "*");
+				equation.setText(equation.getText() + "X");
 			}
 		});
 		divButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				equation.setText(equation.getText() + "/");
+				equation.setText(equation.getText() + "÷");
 			}
 		});
 		leftBracket.addActionListener(new ActionListener() {
@@ -293,8 +300,8 @@ public class CalFrame extends JFrame {
 		add(jp2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		setTitle("QiaoCalculator v2.1");
-		setSize(430, 400);
+		setTitle("QiaoCalculator v2.2");
+		setSize(500, 400);
 		setLocation(200, 200);
 		setVisible(true);
 	}
