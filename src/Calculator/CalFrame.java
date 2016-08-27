@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -59,12 +60,39 @@ public class CalFrame extends JFrame {
 	private JPanel jp1 = new JPanel();
 	private JPanel jp2 = new JPanel();
 
-	public CalFrame() {
+	public CalFrame () {
 
 		equation.setEditable(false);
 		result.setEditable(false);
 		
 		//颜色,字体设置
+		colorAndFontSettings();
+		
+		//添加动作
+		actionSettings();
+		
+		//设置各个组成部分的位置
+		positionSettings();
+		
+		//其他设置
+		setLayout( new GridLayout(2,1));
+		add(jp1);
+		add(jp2);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setTitle("QiaoCalculator v2.3");
+		setSize(500, 400);
+		setLocation(200, 200);
+		setVisible(true);
+		
+	}
+	
+	public static void main ( String[] args ) {
+		new CalFrame();
+	}
+	
+	private void colorAndFontSettings () {
+		
 		equationLabel.setFont(FONT2);
 		resultLabel.setFont(FONT2);
 		equation.setFont(FONT3);
@@ -98,9 +126,10 @@ public class CalFrame extends JFrame {
 		equalButton.setFont(FONT1);
 		clearButton.setBackground(CLR_COLOR);
 		deleteButton.setBackground(DEL_COLOR);
+	}
+	
+	private void actionSettings () {
 		
-		
-		//添加动作
 		num0.addActionListener(new ActionListener() {
 
 			@Override
@@ -224,9 +253,18 @@ public class CalFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				String cmd = equation.getText();
 				Calculate cl = new Calculate();
-				result.setText(cl.calResult(cmd));
+				
+				String resultMsg = cl.calResult(cmd);
+				if ( resultMsg.equals("算式格式错误") || resultMsg.equals("除数不能为0") ) {
+					JOptionPane.showMessageDialog(null, resultMsg, "错误", JOptionPane.WARNING_MESSAGE);
+				}
+				else {
+					result.setText(resultMsg);
+				}
+
 			}
 		});
 		clearButton.addActionListener(new ActionListener() {
@@ -250,7 +288,10 @@ public class CalFrame extends JFrame {
 			}
 		});
 		
-//		jp1.setLayout(null);
+	}
+	
+	private void positionSettings () {
+		
 		jp1.add(equationLabel);
 		jp1.add(equation);
 		jp1.add(resultLabel);
@@ -295,19 +336,6 @@ public class CalFrame extends JFrame {
 		jp2.setLocation(0, 100);
 		jp2.setVisible(true);
 		
-		setLayout( new GridLayout(2,1));
-		add(jp1);
-		add(jp2);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
-		setTitle("QiaoCalculator v2.2");
-		setSize(500, 400);
-		setLocation(200, 200);
-		setVisible(true);
-	}
-	
-	public static void main ( String[] args ) {
-		new CalFrame();
 	}
 	
 }

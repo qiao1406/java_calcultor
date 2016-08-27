@@ -36,11 +36,6 @@ public class Calculate {
 			if( isNum(temp) )  { // temp是数字
 				tempNum.append(temp);
 			}
-//			else if ( exp.length() > 1 && temp.equals("-") && 
-//					isNum(exp.substring(1, 2)) ) {
-//				System.out.println("xxx");
-//				tempNum.append(temp);
-//			}
 			else { // temp不是数字
 				
 				if (!"".equals(tempNum.toString())) {
@@ -120,7 +115,6 @@ public class Calculate {
 	
 	private String negativeNumTransfer( String equation ) {
 		// 处理算式，将表示负数的部分进行改动，转成calResult方法支持的 
-//		char[] c = equation.toCharArray();
 		
 		if( equation.length() <= 1 ) {
 			return equation;
