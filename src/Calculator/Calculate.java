@@ -1,22 +1,26 @@
 package Calculator;
 
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.jetbrains.annotations.Contract;
 
-import sun.security.krb5.internal.ccache.CCacheInputStream;
+import java.math.BigDecimal;
+import java.util.Stack;
+
 
 public class Calculate {
+	//TODO 处理0.4*3的返回值问题
+	//DONE: 处理1234567890+1的返回值问题
+
 	
 	private Stack<Double> numStack = new Stack<Double>();
-	private Stack<Character> sybStack = new Stack<Character>(); 
-	
+	private Stack<Character> sybStack = new Stack<Character>();
+
+
+	//TODO: 整理逻辑，写注释
 	public String calResult ( String equation ) {
 		
 		//替换乘除号
-		equation = equation.replace("X", "*");
-		equation = equation.replace("÷", "/");
-		
+		equation = equation.replace("X", "*").replace("÷", "/");
+
 		//处理负号
 		equation = negativeNumTransfer(equation);
 		
@@ -26,7 +30,7 @@ public class Calculate {
 		
 		equation += "#";
 		StringBuffer tempNum = new StringBuffer();
-		StringBuffer exp = new StringBuffer().append(equation);
+		StringBuffer exp = new StringBuffer().append(equation); // 算式
 		
 		while ( exp.length() != 0 ) {
 			
@@ -37,8 +41,7 @@ public class Calculate {
 				tempNum.append(temp);
 			}
 			else { // temp不是数字
-				
-				if (!"".equals(tempNum.toString())) {
+				if ( !tempNum.toString().equals("")){
 					// 当表达式的第一个符号为括号
 					double num = Double.parseDouble(tempNum.toString());
 					numStack.push(num);
@@ -61,7 +64,7 @@ public class Calculate {
 				}
 				
 				// 判断当前运算符与栈顶元素优先级， 如果高，或者低于平，计算完后，将当前操作符号，放入操作符栈
-				refreshSybStack(temp);
+				refreshSymbolStack(temp);
 				
 			}
 			
@@ -70,7 +73,7 @@ public class Calculate {
 		return getResultStr(numStack.pop());
 	}
 	
-	private void refreshSybStack ( String temp) {
+	private void refreshSymbolStack ( String temp) {
 		if (temp.charAt(0) != '#') {
 			sybStack.push(new Character(temp.charAt(0)));
 			if (temp.charAt(0) == ')') {// 当栈顶为'('，而当前元素为')'时，则是括号内以算完，去掉括号
@@ -129,6 +132,7 @@ public class Calculate {
 			}
 			
 			if ( i == 0 ) {
+				// 当负号在第一位的时候，把负号解释成减号
 				char temp = str.charAt(1);
 				if( isNumChar(temp) || isDecimalPoint(temp) || isLeftBracket(temp) ) {
 					str.insert(0, "0");
@@ -139,8 +143,7 @@ public class Calculate {
 				char last = str.charAt(i-1);
 				char next = str.charAt(i+1);
 				
-				if( isLeftBracket(last) &&
-					( isNumChar(next) || isDecimalPoint(next) || isLeftBracket(next) ) ) {
+				if( isLeftBracket(last) && ( isNumChar(next) || isDecimalPoint(next) || isLeftBracket(next) ) ) {
 					str.insert(i, "0");
 					i++;
 				}
@@ -154,6 +157,7 @@ public class Calculate {
 	
 	
 	private boolean checkFormat ( String equation ) {
+		// 算式格式检查
 		char[] c = equation.toCharArray();
 		int singleBracket = 0;
 		
@@ -170,8 +174,9 @@ public class Calculate {
 				if( !isLeftBracket(c[i]) && !isNumChar(c[i]) ) {
 					return false;
 				}
+
 			}
-			else if ( isNumChar(c[i]) || isDecimalPoint(c[i]) ) { //数字左边不能是右括号
+			else if ( isNumChar(c[i]) ) { //数字左边不能是右括号
 				if ( isRightBracket(c[i-1]) ) {
 					return false;
 				}
@@ -179,6 +184,16 @@ public class Calculate {
 			else if( isLeftBracket(c[i]) )  { // 左括号的左边不能是数字和右括号
 				if ( isNumChar(c[i-1]) || isDecimalPoint(c[i-1]) || isRightBracket(c[i-1]) ) {
 					return false;
+				}
+			}
+			else if ( isDecimalPoint(c[i]) ) {
+				if ( i == c.length - 1 ) { // 小数点不能在最后一位
+					return false;
+				}
+				else {
+					if ( !isNumChar(c[i-1]) || !isNumChar(c[i+1]) ) { // 小数点的左右不能是非数字字符
+						return  false;
+					}
 				}
 			}
 			else {  // 右括号和四则运算符的左边只能是数字或者右括号
@@ -200,7 +215,7 @@ public class Calculate {
 		return c == '(';
 	}
 	
-	private static boolean isRightBracket ( char c ) {
+	private static boolean isRightBracket (char c ) {
 		return c == ')';
 	}
 	
@@ -254,7 +269,8 @@ public class Calculate {
 	}
 	
 	private String getResultStr ( double result ) {
-		StringBuffer s = new StringBuffer().append( result + "" );
+		BigDecimal res = new BigDecimal(Double.toString(result));
+		StringBuffer s = new StringBuffer().append(res.toPlainString());
 		
 		if ( s.substring(s.length() - 2).equals(".0") ) {
 			s.delete( s.length()-2 , s.length() );

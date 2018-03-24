@@ -1,10 +1,7 @@
 package Calculator;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 
 public class CalFrame extends JFrame {
@@ -80,7 +76,7 @@ public class CalFrame extends JFrame {
 		add(jp2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		setTitle("QiaoCalculator v2.3");
+		setTitle("QiaoCalculator v2.4");
 		setSize(500, 400);
 		setLocation(200, 200);
 		setVisible(true);
