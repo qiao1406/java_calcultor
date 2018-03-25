@@ -76,7 +76,7 @@ public class CalFrame extends JFrame {
 		add(jp2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		setTitle("QiaoCalculator v2.4");
+		setTitle("QiaoCalculator v2.5");
 		setSize(500, 400);
 		setLocation(200, 200);
 		setVisible(true);
@@ -249,8 +249,9 @@ public class CalFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				String cmd = equation.getText();
+				//替换乘除号
+				String cmd = equation.getText().replace("X", "*").replace("÷", "/");
+
 				Calculate cl = new Calculate();
 				
 				String resultMsg = cl.calResult(cmd);

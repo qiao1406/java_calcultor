@@ -7,19 +7,15 @@ import java.util.Stack;
 
 
 public class Calculate {
+	//DONE 处理3*崩溃的问题
 	//TODO 处理0.4*3的返回值问题
 	//DONE: 处理1234567890+1的返回值问题
 
-	
 	private Stack<Double> numStack = new Stack<Double>();
 	private Stack<Character> sybStack = new Stack<Character>();
 
-
 	//TODO: 整理逻辑，写注释
 	public String calResult ( String equation ) {
-		
-		//替换乘除号
-		equation = equation.replace("X", "*").replace("÷", "/");
 
 		//处理负号
 		equation = negativeNumTransfer(equation);
@@ -41,17 +37,16 @@ public class Calculate {
 				tempNum.append(temp);
 			}
 			else { // temp不是数字
-				if ( !tempNum.toString().equals("")){
-					// 当表达式的第一个符号为括号
-					double num = Double.parseDouble(tempNum.toString());
-					numStack.push(num);
+				if ( !tempNum.toString().equals("")) {
+					double num = Double.parseDouble(tempNum.toString()); // tempNum 转换成运算数
+					numStack.push(num); // 放入运算数栈
 					tempNum.delete(0, tempNum.length());
 				}
 				// 用当前取得的运算符与栈顶运算符比较优先级：若高于，则因为会先运算，放入栈顶；若等于，因为出现在后面，
 				// 所以会后计算，所以栈顶元素出栈，取出操作数运算；若小于，则同理，取出栈顶元素运算，将结果入操作数栈。
 
 				// 判断当前运算符与栈顶元素优先级，取出元素，进行计算(因为优先级可能小于栈顶元素，还小于第二个元素等等，需要用循环判断)
-				while ( !compare(temp.charAt(0)) && (!sybStack.empty()) ) {
+				while ( !compare(temp.charAt(0)) && !sybStack.empty() ) {
 					double a = numStack.pop();
 					double b = numStack.pop();
 					char ope = sybStack.pop();
@@ -154,8 +149,6 @@ public class Calculate {
 		return str.toString();
 	}
 	
-	
-	
 	private boolean checkFormat ( String equation ) {
 		// 算式格式检查
 		char[] c = equation.toCharArray();
@@ -168,6 +161,10 @@ public class Calculate {
 			}
 			if ( isRightBracket(c[i]) ) {
 				singleBracket--;
+			}
+
+			if ( i == c.length - 1 && isOpChar(c[i])) { // 最后一个符号不能是运算符
+				return false;
 			}
 			
 			if ( i == 0 ) { //第1个元素只能是[0-9]或者是左括号
@@ -196,7 +193,7 @@ public class Calculate {
 					}
 				}
 			}
-			else {  // 右括号和四则运算符的左边只能是数字或者右括号
+			else if ( isRightBracket(c[i]) || isOpChar(c[i]) ) {  // 右括号和四则运算符的左边只能是数字或者右括号
 				if ( !isNumChar(c[i-1]) && !isRightBracket(c[i-1]) ) {
 					return false;
 				}
@@ -207,67 +204,74 @@ public class Calculate {
 		return singleBracket == 0;
 	}
 
-	private static boolean isNum ( String temp ) {
-		return temp.matches("[0-9]") || temp.equals(".");
-	}
-	
-	private static boolean isLeftBracket ( char c ) {
-		return c == '(';
-	}
-	
-	private static boolean isRightBracket (char c ) {
-		return c == ')';
-	}
-	
-	private static boolean isDecimalPoint ( char c ) {
-		return c == '.';
-	}
-	
-	private static boolean isNumChar ( char c ) {
-		return ( c >= '0' && c <= '9' );
-	}
-
 	private boolean compare (char str) {
+
 		if ( sybStack.empty() ) {
 			// 当为空时，显然 当前优先级最低，返回高
 			return true;
 		}
-		char last = (char) sybStack.lastElement();
+
+		char last = sybStack.peek();
 		// 如果栈顶为'('显然，优先级最低，')'不可能为栈顶。
-		if (last == '(') {
+		if ( last == '(' ) {
 			return true;
 		}
 		switch (str) {
-		case '#':
-			return false;// 结束符
-		case '(':
-			// '('优先级最高,显然返回true
-			return true;
-		case ')':
-			// ')'优先级最低，
-			return false;
-		case '*': {
-			// '*/'优先级只比'+-'高
-			if (last == '+' || last == '-')
+			case '#':
+				return false;// 结束符
+			case '(':
+				// '('优先级最高,显然返回true
 				return true;
-			else
+			case ')':
+				// ')'优先级最低，
 				return false;
-		}
-		case '/': {
-			if (last == '+' || last == '-')
+			case '*': {
+				// '*/'优先级只比'+-'高
+				if (last == '+' || last == '-')
+					return true;
+				else
+					return false;
+			}
+			case '/': {
+				if (last == '+' || last == '-')
+					return true;
+				else
+					return false;
+			}
+			// '+-'为最低，一直返回false
+			case '+':
+				return false;
+			case '-':
+				return false;
+			default:
 				return true;
-			else
-				return false;
 		}
-		// '+-'为最低，一直返回false
-		case '+':
-			return false;
-		case '-':
-			return false;
-		}
-		return true;
+	}
+
+	private boolean isNum ( String temp ) {
+		return temp.matches("[0-9]") || temp.equals(".");
 	}
 	
+	private boolean isLeftBracket ( char c ) {
+		return c == '(';
+	}
+	
+	private boolean isRightBracket (char c ) {
+		return c == ')';
+	}
+	
+	private boolean isDecimalPoint ( char c ) {
+		return c == '.';
+	}
+	
+	private boolean isNumChar ( char c ) {
+		return ( c >= '0' && c <= '9' );
+	}
+
+	private boolean isOpChar ( char c ) {
+		return ( c == '+' || c == '-' || c == '*' || c== '/');
+	}
+
 	private String getResultStr ( double result ) {
 		BigDecimal res = new BigDecimal(Double.toString(result));
 		StringBuffer s = new StringBuffer().append(res.toPlainString());

@@ -22,6 +22,8 @@ public class CalculateTest {
     public void calResult() throws Exception {
         assertEquals("2",  cal.calResult("1+1"));
         assertEquals("-2", cal.calResult("-1*2.0"));
+        assertEquals("15241577639079420", cal.calResult("1234567890*12345678"));
+        assertEquals("72", cal.calResult("2*(1+5*(2+5))"));
     }
 
     @Test
@@ -40,7 +42,7 @@ public class CalculateTest {
             assertFalse((Boolean) checkFormat.invoke(cal, "(.2*6)"));
             assertFalse((Boolean) checkFormat.invoke(cal, "(2+)"));
             assertFalse((Boolean) checkFormat.invoke(cal, "(+)"));
-
+            assertFalse((Boolean) checkFormat.invoke(cal, "333*"));
 
 
             // Right Case
