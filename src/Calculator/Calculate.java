@@ -204,7 +204,7 @@ public class Calculate {
 		return singleBracket == 0;
 	}
 
-	private boolean compare (char str) {
+	private boolean compare (char c) {
 
 		if ( sybStack.empty() ) {
 			// 当为空时，显然 当前优先级最低，返回高
@@ -216,7 +216,7 @@ public class Calculate {
 		if ( last == '(' ) {
 			return true;
 		}
-		switch (str) {
+		switch (c) {
 			case '#':
 				return false;// 结束符
 			case '(':
