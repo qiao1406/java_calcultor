@@ -14,7 +14,7 @@ public class CalculateTest {
 
     @Before
     public void setUp() {
-        cal = new Calculate();
+        cal = Calculate.getCalculate();
     }
 
 
