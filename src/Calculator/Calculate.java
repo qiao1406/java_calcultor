@@ -1,7 +1,5 @@
 package Calculator;
 
-import org.jetbrains.annotations.Contract;
-
 import java.math.BigDecimal;
 import java.util.Stack;
 
@@ -13,8 +11,18 @@ public class Calculate {
 
 	private Stack<Double> numStack = new Stack<Double>();
 	private Stack<Character> sybStack = new Stack<Character>();
+	private static Calculate cal = new Calculate();
 
-	//TODO: 整理逻辑，写注释
+	// 这个类采用了单例模式
+	private Calculate() {
+
+	}
+
+	public static Calculate getCalculate( ) {
+		return cal;
+	}
+
+	//DONE: 整理逻辑，写注释
 	public String calResult ( String equation ) {
 
 		//处理负号
