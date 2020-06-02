@@ -252,7 +252,7 @@ public class CalFrame extends JFrame {
 				//替换乘除号
 				String cmd = equation.getText().replace("X", "*").replace("÷", "/");
 
-				Calculate cl = new Calculate();
+				Calculate cl = Calculate.getCalculate();
 				
 				String resultMsg = cl.calResult(cmd);
 				if ( resultMsg.equals("算式格式错误") || resultMsg.equals("除数不能为0") ) {
